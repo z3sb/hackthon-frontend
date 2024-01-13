@@ -34,8 +34,13 @@ const Form = () => {
     formState: { errors },
   } = useForm<IFrom>();
 
-  async function onSubmit(data: unknown) {
-    const response = await axiosClient.post("api/users/login", data);
+  async function onSubmit(data: IFrom) {
+    try {
+      const response = await axiosClient.post("api/users/login", data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(errors);
+    }
   }
 
   return (
