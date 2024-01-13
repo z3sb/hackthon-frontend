@@ -1,9 +1,9 @@
-import Input from '@/components/custom/Input';
-import InputFileUPloader from '@/components/custom/InputUploader';
-import { IconUpload } from '@tabler/icons-react';
-import Image from 'next/image';
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import Input from "@/components/custom/Input";
+import InputFileUPloader from "@/components/custom/InputUploader";
+import { axiosClient } from "@/services/axios";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 function index() {
   const {
@@ -12,15 +12,35 @@ function index() {
     formState: { errors },
   } = useForm();
 
-  const submit = (data:any) =>{ 
-     console.log(data)
-  }
+  const submit = async (data: any) => {
+    try {
+      const formData = {
+        videoFile: data?.video[0],
+        title: data?.textInput,
+        description: data?.textareaField,
+      };
+
+      const response = await axiosClient.post(
+        "/api/v1/video-upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(response.data);
+      console.log(data);
+    } catch (error) {
+      toast.error("An Error Happen");
+    }
+  };
   return (
     <div className="flex  w-full h-screen ">
       <div className="bg-white shadow w-full h-full p-5 flex flex-col rounded">
         <h2 className="text-2xl text-center">upload video</h2>
         <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-2">
-          <InputFileUPloader name='video' register={register}>
+          <InputFileUPloader name="video" register={register}>
             <div className="flex flex-col items-center justify-center pt-5 pb-6 w-full">
               <svg
                 className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
@@ -58,11 +78,17 @@ function index() {
               />
             </InputFileUPloader>
           </div> */}
-          <Input placeholder="Enter video title"  register={register}  label="title" />
+          <Input
+            placeholder="Enter video title"
+            register={register}
+            label="title"
+          />
           <label className="flex flex-col">
             Descriptions
-            <textarea  {...register('textareaField')} className="border hover:border-indigo-600 mt-4 rounded shadow text-gray-400 p-2"/>
-      
+            <textarea
+              {...register("textareaField")}
+              className="border hover:border-indigo-600 mt-4 rounded shadow text-gray-400 p-2"
+            />
           </label>
           <button
             type="submit"
