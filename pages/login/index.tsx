@@ -7,6 +7,7 @@ import useLogin from "@/hooks/Login/useLogin";
 import { useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import { axiosClient } from "@/services/axios";
+import { useRouter } from "next/router";
 
 const index = () => {
   useLogin();
@@ -23,11 +24,12 @@ const index = () => {
 export default index;
 
 interface IFrom {
-  email: string;
+  username: string;
   password: string;
 }
 
 const Form = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -36,8 +38,10 @@ const Form = () => {
 
   async function onSubmit(data: IFrom) {
     try {
-      const response = await axiosClient.post("api/users/login", data);
-      console.log(response.data);
+      const response = await axiosClient.post("/api/users/login", data);
+      const responseData = await response.data;
+      localStorage.setItem("ACCESS_TOKEN", responseData?.accessToken);
+      router.replace("/");
     } catch (error) {
       console.log(errors);
     }
@@ -71,23 +75,23 @@ const Form = () => {
               htmlFor="email-input"
               className={twMerge(
                 "mb-1 inline-block text-sm font-medium",
-                errors?.email?.message ? "text-red-600" : ""
+                errors?.username?.message ? "text-red-600" : ""
               )}
             >
               Email<span className="text-red-600">*</span>
             </label>
             <input
               id="email-input"
-              {...register("email", { required: "Email is Required" })}
+              {...register("username", { required: "Email is Required" })}
               type="email"
               placeholder="Enter your email"
               className="w-full rounded border-[1px] border-slate-300 px-2.5 py-1.5 focus:outline-indigo-600"
               required
             />
 
-            {errors?.email?.message ? (
+            {errors?.username?.message ? (
               <span className="text-sm text-red-600">
-                {errors?.email?.message}
+                {errors?.username?.message}
               </span>
             ) : null}
           </motion.div>
@@ -97,7 +101,7 @@ const Form = () => {
               htmlFor="password-input"
               className={twMerge(
                 "mb-1 inline-block text-sm font-medium",
-                errors?.email?.message ? "text-red-600" : ""
+                errors?.password?.message ? "text-red-600" : ""
               )}
             >
               Password<span className="text-red-600">*</span>
