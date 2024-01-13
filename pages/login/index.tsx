@@ -1,10 +1,16 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FiArrowUpRight, FiStar } from 'react-icons/fi';
-import Image from 'next/image';
-import Link from 'next/link';
+import React from "react";
+import { motion } from "framer-motion";
+import { FiArrowUpRight, FiStar } from "react-icons/fi";
+import Image from "next/image";
+import Link from "next/link";
+import useLogin from "@/hooks/Login/useLogin";
+import { useForm } from "react-hook-form";
+import { twMerge } from "tailwind-merge";
+import { axiosClient } from "@/services/axios";
 
 const index = () => {
+  useLogin();
+
   return (
     <section className="grid min-h-screen grid-cols-1 bg-slate-50 md:grid-cols-[1fr,_400px] lg:grid-cols-[1fr,_600px]">
       <Logo />
@@ -16,7 +22,22 @@ const index = () => {
 
 export default index;
 
+interface IFrom {
+  email: string;
+  password: string;
+}
+
 const Form = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFrom>();
+
+  async function onSubmit(data: unknown) {
+    const response = await axiosClient.post("api/users/login", data);
+  }
+
   return (
     <motion.div
       initial="initial"
@@ -35,88 +56,78 @@ const Form = () => {
           Login your account
         </motion.h1>
         <motion.p variants={primaryVariants} className="mb-8 text-center">
-          Welcome back share your screen and enjoy with your friend and our family
+          Welcome back share your screen and enjoy with your friend and our
+          family
         </motion.p>
 
         <form onSubmit={(e) => e.preventDefault()} className="w-full">
           <motion.div variants={primaryVariants} className="mb-2 w-full">
             <label
               htmlFor="email-input"
-              className="mb-1 inline-block text-sm font-medium"
+              className={twMerge(
+                "mb-1 inline-block text-sm font-medium",
+                errors?.email?.message ? "text-red-600" : ""
+              )}
             >
               Email<span className="text-red-600">*</span>
             </label>
             <input
               id="email-input"
+              {...register("email", { required: "Email is Required" })}
               type="email"
               placeholder="Enter your email"
               className="w-full rounded border-[1px] border-slate-300 px-2.5 py-1.5 focus:outline-indigo-600"
               required
             />
+
+            {errors?.email?.message ? (
+              <span className="text-sm text-red-600">
+                {errors?.email?.message}
+              </span>
+            ) : null}
           </motion.div>
 
           <motion.div variants={primaryVariants} className="mb-2 w-full">
             <label
               htmlFor="password-input"
-              className="mb-1 inline-block text-sm font-medium"
+              className={twMerge(
+                "mb-1 inline-block text-sm font-medium",
+                errors?.email?.message ? "text-red-600" : ""
+              )}
             >
               Password<span className="text-red-600">*</span>
             </label>
             <input
               id="password-input"
               type="password"
+              {...register("password", { required: "Password is Required" })}
               placeholder="Enter your password"
               className="w-full rounded border-[1px] border-slate-300 px-2.5 py-1.5 focus:outline-indigo-600"
               required
             />
+            {errors?.password?.message ? (
+              <span className="text-sm text-red-600">
+                {errors?.password?.message}
+              </span>
+            ) : null}
           </motion.div>
-
-          <motion.div variants={primaryVariants} className="mb-4 w-full">
-            <label
-              htmlFor="rt-password-input"
-              className="mb-1 inline-block text-sm font-medium"
-            >
-              Re-type Password<span className="text-red-600">*</span>
-            </label>
-            <input
-              id="rt-password-input"
-              type="password"
-              placeholder="Re-type your password"
-              className="w-full rounded border-[1px] border-slate-300 px-2.5 py-1.5 focus:outline-indigo-600"
-              required
-            />
-          </motion.div>
-{/* 
-          <motion.div
-            variants={primaryVariants}
-            className="mb-4 flex w-full items-start gap-1.5"
-          >
-            <input
-              type="checkbox"
-              id="terms-checkbox"
-              className="h-4 w-4 accent-indigo-600"
-              required
-            />
-            <label htmlFor="terms-checkbox" className="text-xs">
-              By signing up, I agree to the terms and conditions, privacy
-              policy, and cookie policy
-            </label>
-          </motion.div> */}
 
           <motion.button
             variants={primaryVariants}
             whileTap={{
               scale: 0.985,
             }}
+            onClick={handleSubmit(onSubmit)}
             type="submit"
             className="mb-1.5 w-full rounded bg-indigo-600 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-indigo-700"
           >
             Login
           </motion.button>
           <motion.p variants={primaryVariants} className="text-xs">
-            Do no have an account?{' '}
-          
-            <Link className="text-indigo-600 underline" href={'/signup'}>create an account</Link>
+            Do no have an account?{" "}
+            <Link className="text-indigo-600 underline" href={"/signup"}>
+              create an account
+            </Link>
           </motion.p>
         </form>
       </div>
