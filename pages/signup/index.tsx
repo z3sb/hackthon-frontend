@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { axiosClient } from "@/services/axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 const index = () => {
   return (
@@ -31,12 +33,16 @@ const Form = () => {
     formState: { errors },
   } = useForm<IFrom>();
 
+  const router = useRouter();
+
   async function onSubmit(data: IFrom) {
     try {
       const response = await axiosClient.post("/api/users", data);
       console.log(response);
+      toast.success("User Sign up successfully");
+      router.replace("/login");
     } catch (error) {
-      console.log(error);
+      toast.error("An Error happen");
     }
   }
 

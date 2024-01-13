@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import { axiosClient } from "@/services/axios";
 import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const index = () => {
   useLogin();
@@ -17,6 +19,7 @@ const index = () => {
       <Logo />
       <Form />
       <SupplementalContent />
+      <ToastContainer />
     </section>
   );
 };
@@ -41,9 +44,10 @@ const Form = () => {
       const response = await axiosClient.post("/api/users/login", data);
       const responseData = await response.data;
       localStorage.setItem("ACCESS_TOKEN", responseData?.accessToken);
+      toast.success("User Login Successfully");
       router.replace("/");
     } catch (error) {
-      console.log(errors);
+      toast.error("An Error happen");
     }
   }
 
@@ -78,7 +82,7 @@ const Form = () => {
                 errors?.username?.message ? "text-red-600" : ""
               )}
             >
-              Email<span className="text-red-600">*</span>
+              Username<span className="text-red-600">*</span>
             </label>
             <input
               id="email-input"
