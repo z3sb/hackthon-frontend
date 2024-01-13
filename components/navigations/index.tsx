@@ -13,7 +13,7 @@ export const sidebareLinkes : IProps[] = [
       id: 'home',
       title: 'streaming',
       icon:<IconBrandYoutube />,
-      navLink: '/home',
+      navLink: '/',
     // if you need to add permisions
       policy: ''
     },
