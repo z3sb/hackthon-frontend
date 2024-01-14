@@ -2,8 +2,9 @@ import Card from "@/components/Home/main/Card";
 
 const index = () => {
   return (
-    <div className="p-4 md:p-8 ">
-      <div className="flex flex-wrap gap-4  w-full ">
+    <div className="p-3">
+
+      <div className="flex flex-wrap gap-8 justify-start px-5  w-full">
         <Card
           heading="Plan"
           description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, exercitationem."

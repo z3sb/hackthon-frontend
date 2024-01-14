@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import Sidebar from "../navigations/Sidebar";
+import Heading from "../navigations/Heading";
 import useLayout from "@/hooks/Layout/useLayout";
 
 interface IProps {
@@ -10,8 +10,8 @@ function Layout({ children }: IProps) {
   useLayout();
 
   return (
-    <div className="flex gap-4">
-      <Sidebar />
+    <div className="flex flex-col gap-4">
+      <Heading />
       {children}
     </div>
   );

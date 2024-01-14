@@ -1,9 +1,10 @@
-"use client";
-import { useRouter } from "next/router";
+"use client"; 
+import { useRouter } from "next/router"; 
+import Cookies from 'js-cookie'
 
 function useLayout() {
-  const token = localStorage.getItem("ACCESS_TOKEN");
-  const router = useRouter();
+  const token = Cookies.get("ACCESS_TOKEN"); 
+  const router = useRouter(); 
 
   if (!token) {
     router.replace("/login");

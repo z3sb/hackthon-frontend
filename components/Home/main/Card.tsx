@@ -16,7 +16,7 @@ const Card = ({ heading, description, imgSrc }: Iprops) => {
         staggerChildren: 0.035,
       }}
       whileHover="hover"
-      className=" w-80 h-48  overflow-hidden cursor-pointer group relative"
+      className="w-wxl h-56 overflow-hidden cursor-pointer group relative"
     >
       <Link href="/stream">
         <div

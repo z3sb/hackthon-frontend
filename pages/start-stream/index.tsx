@@ -5,8 +5,8 @@ type Props = {}
 
 function index({}: Props) {
   return (
-    <div className="p-4 md:p-8 ">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8 w-full max-w-6xl mx-auto">
+    <div className="p-3">
+      <div className="flex flex-wrap gap-8 items-center md:justify-center xl:justify-start px-5  w-full">
         <Card
           heading="Plan"
           description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, exercitationem."
